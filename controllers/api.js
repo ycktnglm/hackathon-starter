@@ -120,7 +120,32 @@ exports.getFacebook = function(req, res, next) {
     },
     getMyFriends: function(done) {
       graph.get(req.user.facebook + '/friends', function(err, friends) {
+        // console.log(friends);
         done(err, friends.data);
+      });
+    },
+    getSinglePost: function(done) {
+      graph.get('/104868739980307_104901933310321', function(err, post) {
+        // console.log(post);
+        done(err, post.data);
+      });
+    },
+    getPhotos: function(done) {
+      graph.get(req.user.facebook + '/photos?type=uploaded', function(err, photos) {
+        // console.log(photos);
+        done(err, photos.data);
+      });
+    },
+    getPhotoImage: function(done) {
+      graph.get('/104900069977174/picture', function(err, pic) {
+        // console.log(pic);
+        done(err, pic.data);
+      });
+    },
+    getPosts: function(done) {
+      graph.get(req.user.facebook + '/posts?fields=picture,full_picture,attachments,message,created_time', function(err, posts) {
+        console.log(posts);
+        done(err, posts.data);
       });
     }
   },
@@ -131,7 +156,8 @@ exports.getFacebook = function(req, res, next) {
     res.render('api/facebook', {
       title: 'Facebook API',
       me: results.getMe,
-      friends: results.getMyFriends
+      friends: results.getMyFriends,
+      posts: results.getPosts
     });
   });
 };
