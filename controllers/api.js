@@ -145,7 +145,9 @@ exports.getFacebook = function(req, res, next) {
     getPosts: function(done) {
       graph.get(req.user.facebook + '/posts?fields=picture,full_picture,attachments,message,created_time', function(err, posts) {
         console.log(posts);
-        done(err, posts.data);
+        const personaProcess = require('./process')
+        let persona = personaProcess.evaluate(posts.data)
+        done(err, persona);
       });
     }
   },
@@ -153,11 +155,11 @@ exports.getFacebook = function(req, res, next) {
     if (err) {
       return next(err);
     }
+
     res.render('api/facebook', {
       title: 'Facebook API',
       me: results.getMe,
-      friends: results.getMyFriends,
-      posts: results.getPosts
+      ratings: results.getPosts.ratings
     });
   });
 };
